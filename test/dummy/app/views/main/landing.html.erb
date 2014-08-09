@@ -1,0 +1,22 @@
+<% @bc.option 'simple' do %>
+  <div id="test-simple">
+    <%= link_to 'Sign up now!', sign_up_path, class: 'btn' %>
+  </div>
+<% end %>
+
+<% @bc.option 'polite' do %>
+  <div id="test-polite">
+    Please <%= link_to 'sign up', sign_up_path %> here.
+  </div>
+<% end %>
+
+<% @bc.option 'blackmail' do %>
+  <div id="test-blackmail">
+    <h1>
+      IF YOU WON'T
+      <%= link_to 'SIGN UP', sign_up_path %> 
+      WE WILL KILL THIS DOG!
+      <img src="doge.jpg">
+    </h1>
+  </div>
+<% end %>
