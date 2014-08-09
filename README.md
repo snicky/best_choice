@@ -26,7 +26,7 @@ First you need to include BestChoice::RailsUtil in your controller:
 include BestChoice::RailsUtil
 ```
 
-In order to create a test and assign some options to it, you need to initialize a new `Selector`. You can initialize an instance of the default `Selector` using this simple syntax:
+In order to create a test and assign some options to it, you need to initialize a new `Selector`. You can initialize an instance of the default `Selector` using this helper:
 
 ```ruby
 @selector = best_choice_for test_name
@@ -46,7 +46,7 @@ end
 
 The `option` method both assigns an option to the test by saving its name in a storage (look below) and also chooses whether to execute the given block of code or not. Only one of the options is chosen per any given instance of a `Selector` and only this option's block of code gets executed. The choice is made by an algorithm based on statistics gathered in the storage as well. 
 
-As a consequence of this design, the very first time your code is being run (the very first instance of the `Selector` with the given name is being initialized) the first option will be chosen for sure. Any consecutive time though, the choice will be made based on the saved stats.
+As a consequence of this design, the very first time your code is being executed (the very first instance of the `Selector` with the given name is being initialized) the first option will be chosen for sure. Any consecutive time though, the choice will be made based on the saved stats.
 
 So far there are only two stats taken into account by the algorithm: `display_count` and `success_count`. Obviously, the `display_count` is being incremented for a given option every time this option is chosen. Though the `success_count` has to be incremented manually by calling:
 
@@ -56,7 +56,7 @@ So far there are only two stats taken into account by the algorithm: `display_co
 
 `BestChoice::RailsUtil` saves the options chosen for any given selector in the session, so you don't need to care about which option you need to mark as a successful one. Any time you mark a success, it means that the option displayed to this visitor is marked as successful.
 
-Here's a complete example of a best_choice setup:
+Here's a complete example of a best_choice setup in Rails:
 
 Controller:
 ```ruby
@@ -74,7 +74,7 @@ end
 ```
 
 View:
-```ruby
+```erb
 <% @bc.option 'simple' do %>
   <%= link_to 'Sign up now!', sign_up_form_path, class: 'btn' %>
 <% end %>
@@ -93,7 +93,7 @@ View:
 <% end %>
 ```
 
-Only one of the given options for a 'call_to_action' will be displayed (simple, polite or blackmail) depending on the gathered statistics. After a big enough sample of visitors went through the flow, the landing page will display the best possible option (the one with the highest success/display ratio) most of the time (90% by default). There's still a possibility (10%) to see another option and this is necessary for the exploration purposes (you can learn more from the article).
+Only one of the given options for a 'call_to_action' test will be displayed (simple, polite or blackmail) depending on the gathered stats. After a sample of visitors goes through the flow, the landing page will display the best possible option (the one with the highest success/display ratio) most of the time (90% by default). There's still a possibility (10%) to see another option and this is necessary for the exploration purposes (you can learn more from the [article][1]).
 
 
 Non-rails usage
@@ -107,8 +107,7 @@ Here's one possible solution using a simple Sinatra API as an example, but you c
 get '/welcome' do
   response = { ... }
 
-  # Mind that outside of Rails there's no
-  # `best_choice_for` helper.
+  # Mind that outside of Rails there's no `best_choice_for` helper.
   selector = BestChoice.for 'sign_up_text'
   
   response.merge(
@@ -166,7 +165,7 @@ class MyAlgorithm < BestChoice::Algorithm
   
   protected
   def do_actual_pick stats
-    # The `stats` argument is an Array of Hashes with the following keys:
+    # The `stats` argument is an <Array> of <Hash>es with the following keys:
     # {name: <String>, display_count: <Int>, success_count: <Int>}
     #
     # Returns one of the stats.
@@ -188,20 +187,20 @@ class MyStorage < BestChoice::Storage
     # [<String>, <String>, ...]
   end
   
-  def add option<String|Symbol>
-    # Saves the option with the given name.
+  def add option
+    # Saves the option (<String>/<Symbol>) with the given name.
   end
 
-  def increment_display_count option<String|Symbol>
-    # Increments the display counter.
+  def increment_display_count option
+    # Increments the display counter for the option.
   end
   
-  def increment_success_count option<String|Symbol|
-    # Increments the success counter.
+  def increment_success_count option
+    # Increments the success counter for the option.
   end
   
   def stats
-    # Returns an Array of Hashes (presenting the stats for all 
+    # Returns an <Array> of <Hash>es (presenting the stats for all 
     # the available options) with the following keys:
     # { name: <String>, display_count: <Int>, success_count: <Int> }
   end
