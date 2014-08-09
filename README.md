@@ -29,7 +29,7 @@ include BestChoice::RailsUtil
 In order to create a test and assign some options to it, you need to initialize a new `Selector`. You can initialize an instance of the default `Selector` using this helper:
 
 ```ruby
-@selector = best_choice_for test_name
+@selector = best_choice_for 'my_test'
 ```
 
 Now you can assign options for the test directly in your view:
