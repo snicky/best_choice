@@ -8,14 +8,11 @@ require './lib/best_choice/selectors/greedy_redis'
 
 
 module BestChoice
-
-  class NotImplementedError < StandardError ; end
-  
   
   module_function
   
-  def for s_name, selector: default_selector, **opts
-    selector.new(s_name, opts)
+  def for selector_name, selector: default_selector, **opts
+    selector.new(selector_name, opts)
   end
   
   def default_selector

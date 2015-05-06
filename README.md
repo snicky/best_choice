@@ -44,23 +44,25 @@ end
 end
 ```
 
-The `option` method both assigns an option to the test by saving its name in a storage (look below) and also chooses whether to execute the given block of code or not. Only one of the options is chosen per any given instance of a `Selector` and only this option's block of code gets executed. The choice is made by an algorithm based on statistics gathered in the storage as well. 
+The `option` method both assigns an option to the test by saving its name in a storage (look below) and also chooses whether to execute the given block of code or not. Only one of the options is chosen per any given instance of a `Selector` and only this option's block of code gets executed. The choice is made by an algorithm based on statistics gathered in the storage. 
 
 As a consequence of this design, the very first time your code is being executed (the very first instance of the `Selector` with the given name is being initialized) the first option will be chosen for sure. Any consecutive time though, the choice will be made based on the saved stats.
 
-So far there are only two stats taken into account by the algorithm: `display_count` and `success_count`. Obviously, the `display_count` is being incremented for a given option every time this option is chosen. Though the `success_count` has to be incremented manually by calling:
+So far there are only two stats taken into account by the algorithm: `display_count` and `success_count`. Obviously, the `display_count` is being incremented for a given option every time this option is displayed. Though the `success_count` has to be incremented manually by calling:
 
 ```ruby
 @selector.mark_success
 ```
 
-`BestChoice::RailsUtil` saves the options chosen for any given selector in the session, so you don't need to care about which option you need to mark as a successful one. Any time you mark a success, it means that the option displayed to this visitor is marked as successful.
+`BestChoice::RailsUtil` saves the options chosen of the selectors in the session, so you don't need to care about which option you need to mark as a successful one. Any time you mark a success, it means that the option displayed to this visitor is marked as successful.
 
 Here's a complete example of a best_choice setup in Rails:
 
 Controller:
 ```ruby
 class MyController < ApplicationController
+  
+  include BestChoice::RailsUtil
   
   def landing
     @bc = best_choice_for 'call_to_action'
@@ -88,8 +90,8 @@ View:
     IF YOU WON'T
     <%= link_to 'SIGN UP', sign_up_form_path %> 
     WE WILL KILL THIS DOG!
-    <img src="doge.jpg">
   </h1>
+  <img src="doge.jpg">
 <% end %>
 ```
 
@@ -134,10 +136,10 @@ get '/sign_up' do
     selector = BestChoice.for 'sign_up_text'
     
     if bc_option = request['bc_option']
-        selector.mark_success bc_option
+      selector.mark_success bc_option
     end
     
-    { text: 'Thanks for signing up' }
+    { text: 'Thanks for signing up' }.to_json
 end
 ```
 
@@ -191,11 +193,11 @@ class MyStorage < BestChoice::Storage
     # Saves the option (<String>/<Symbol>) with the given name.
   end
 
-  def increment_display_count option
+  def display_count_incr option
     # Increments the display counter for the option.
   end
   
-  def increment_success_count option
+  def success_count_incr option
     # Increments the success counter for the option.
   end
   

@@ -6,13 +6,13 @@ module BestChoice
     
     class RedisHash
 
-      def initialize s_name
-        @hash = Redis::HashKey.new "best_choice:#{s_name}"
+      def initialize storage_name
+        @hash_key = Redis::HashKey.new "best_choice:#{storage_name}"
       end
 
       def options
-        if @hash[:options]
-          JSON.parse @hash[:options]
+        if @hash_key[:options]
+          JSON.parse @hash_key[:options]
         else
           []
         end
@@ -20,16 +20,16 @@ module BestChoice
 
       def add option
         unless has_option? option
-          @hash[:options] = (options << option).to_json
+          @hash_key[:options] = (options << option).to_json
         end
       end
 
-      def increment_display_count option
-        @hash.incr display_count_key(option)
+      def display_count_incr option
+        @hash_key.incr display_count_key(option)
       end
 
-      def increment_success_count option
-        @hash.incr success_count_key(option)
+      def success_count_incr option
+        @hash_key.incr success_count_key(option)
       end
 
       def stats
@@ -50,11 +50,11 @@ module BestChoice
       end
 
       def display_count option
-        (@hash[display_count_key(option)] || 0).to_i
+        (@hash_key[display_count_key(option)] || 0).to_i
       end
 
       def success_count option
-        (@hash[success_count_key(option)] || 0).to_i
+        (@hash_key[success_count_key(option)] || 0).to_i
       end
 
       def display_count_key option

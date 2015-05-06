@@ -22,7 +22,7 @@ module BestChoice
     end
 
     def mark_success option
-      @marked_success ||= !!@storage.increment_success_count(option)
+      @marked_success ||= !!@storage.success_count_incr(option)
     end
     
     def picked_option
@@ -43,7 +43,7 @@ module BestChoice
     end
 
     def mark_display option
-      @marked_display ||= !!@storage.increment_display_count(option)
+      @marked_display ||= !!@storage.display_count_incr(option)
     end
 
   end

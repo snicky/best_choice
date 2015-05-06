@@ -24,14 +24,14 @@ class MainControllerTest < ActionController::TestCase
     get :landing
     first_picked_option = session[:_best_choice_picks][@s_name]
     assert_has_html_for first_picked_option
-    
-    clear_picks_from_session
+
+    new_visitor
     get :landing
     second_picked_option = session[:_best_choice_picks][@s_name]
     assert_not_equal first_picked_option, second_picked_option
     assert_has_html_for second_picked_option
     
-    clear_picks_from_session
+    new_visitor
     get :landing
     third_picked_option = session[:_best_choice_picks][@s_name]
     assert_not_equal second_picked_option, third_picked_option
@@ -53,7 +53,7 @@ class MainControllerTest < ActionController::TestCase
     # -------------------------------------------------
     # 2. The second visitor sees another option and chooses to sign up.
     #
-    clear_picks_from_session
+    new_visitor
     get :landing
     second_picked_option = session[:_best_choice_picks][@s_name]
     assert_has_html_for second_picked_option
@@ -64,7 +64,7 @@ class MainControllerTest < ActionController::TestCase
     # 3. The third visitor might either see the second option or the last
     #    available one with success 0 / display 0. He doesn't sign up.
     #
-    clear_picks_from_session
+    new_visitor
     get :landing
     assert_not_equal first_picked_option, 
                      session[:_best_choice_picks][@s_name]
@@ -72,7 +72,7 @@ class MainControllerTest < ActionController::TestCase
     # -------------------------------------------------
     # 4. Force the fourth visitor to see the third option. He also doesn't
     #    sign up.
-    clear_picks_from_session
+    new_visitor
     third_available_option = 
       (all_options - [first_picked_option, second_picked_option])[0]
     session[:_best_choice_picks] = { @s_name => third_available_option }
@@ -88,7 +88,7 @@ class MainControllerTest < ActionController::TestCase
     # Thus the fifth user HAS to see the second option
     # which is currently the best.
     #
-    clear_picks_from_session
+    new_visitor
     get :landing
     assert_equal second_picked_option, session[:_best_choice_picks][@s_name]
     assert_has_html_for second_picked_option
@@ -101,10 +101,11 @@ class MainControllerTest < ActionController::TestCase
   private
   
   # Deletes the picks from the session to avoid forcing the same option
-  # in consecutive requests (this to mock different visitors).
+  # in consecutive requests (to mock different visitors).
   #
-  def clear_picks_from_session
+  def new_visitor
     session.delete :_best_choice_picks
+    assigns(:_best_choice_selectors).clear
   end
   
   def assert_has_html_for picked_option

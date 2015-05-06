@@ -14,8 +14,8 @@ module BestChoice
       after_filter do
         if @_best_choice_selectors
           RailsUtil.best_choice_picks = @_best_choice_selectors.inject(
-            RailsUtil.best_choice_picks) do |picks, selector|
-              picks.merge(selector.name => selector.picked_option)
+            RailsUtil.best_choice_picks) do |picks, (_, selector)|
+              picks.merge!(selector.name => selector.picked_option)
             end
         end
       end
@@ -68,8 +68,8 @@ module BestChoice
     # it can be later retrieved in the after_filter.
     #
     def best_choice_selector_register selector
-      @_best_choice_selectors ||= Set.new
-      @_best_choice_selectors << selector
+      @_best_choice_selectors ||= {}
+      @_best_choice_selectors[selector.name] ||= selector
     end
     
   end

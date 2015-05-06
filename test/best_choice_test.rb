@@ -75,7 +75,7 @@ class BestChoiceTest < ActiveSupport::TestCase
     option = 'red_button'
 
     any_instance_of(@storage_class) do |instance|
-      mock(instance).increment_display_count(option) { true }
+      mock(instance).display_count_incr(option) { true }
     end
     
     @sel.send(:mark_display, option)
@@ -88,7 +88,7 @@ class BestChoiceTest < ActiveSupport::TestCase
     option = 'purple_button'
 
     any_instance_of(@storage_class) do |instance|
-      mock(instance).increment_success_count(option) { true }
+      mock(instance).success_count_incr(option) { true }
     end
 
     @sel.mark_success(option)

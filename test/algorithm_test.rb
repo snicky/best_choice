@@ -22,7 +22,7 @@ class AlgorithmTest < ActiveSupport::TestCase
   end
 
   test 'the class itself does not implement do_actual_pick method' do
-    assert_raises(BestChoice::NotImplementedError) do
+    assert_raises(NotImplementedError) do
       @algorithm.send :do_actual_pick
     end
   end

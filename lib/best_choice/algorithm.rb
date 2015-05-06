@@ -6,7 +6,7 @@ module BestChoice
     
     
     def initialize
-      raise BestChoice::NotImplementedError.new 'Expected subclass to implement'
+      raise NotImplementedError.new 'Expected subclass to implement'
     end
 
     def pick_option stats
@@ -28,7 +28,7 @@ module BestChoice
     protected
     
     def do_actual_pick stats=[]
-      raise BestChoice::NotImplementedError.new 'Expected subclass to implement'
+      raise NotImplementedError.new 'Expected subclass to implement'
     end
     
     def choice_rate option_data
