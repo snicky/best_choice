@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
                      'MIT-LICENSE', 'Rakefile', 'README.rdoc']
   s.test_files  = Dir['test/**/*']
 
-  s.add_runtime_dependency     'json'
-  s.add_runtime_dependency     'redis-objects'
+  s.add_runtime_dependency      'json'         , '~> 0'
+  s.add_runtime_dependency     'redis-objects' , '~> 0'
   
-  s.add_development_dependency 'rr'
-  s.add_development_dependency 'rails', '~> 4.0.4'
-  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'rr'            , '~> 0'
+  s.add_development_dependency 'rails'         , '~> 4'
+  s.add_development_dependency 'sqlite3'       , '~> 0'
 end
