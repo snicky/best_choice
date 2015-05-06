@@ -9,9 +9,8 @@ Gem::Specification.new do |s|
   s.version     = BestChoice::VERSION
   s.authors     = ['Mariusz Pruszyński']
   s.email       = ['mpruszynski@gmail.com']
-  # s.homepage    = "TODO"
-  s.summary     = 'TODO: Summary of BestChoice.'
-  s.description = 'TODO: Description of BestChoice.'
+  s.summary     = 'Auto A/B testing'
+  s.description = 'Prepare a set of possible options and let your users determine which is the best.'
   s.files       = Dir["{app,config,db,lib}/**/*", 
                      'MIT-LICENSE', 'Rakefile', 'README.rdoc']
   s.test_files  = Dir['test/**/*']
